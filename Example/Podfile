@@ -1,0 +1,24 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/zucred/Specs.git'
+
+use_frameworks!
+
+pod "VMLogin", :path => '../../VMLogin'
+
+pod 'VMLogger'
+
+pod 'Firebase'
+pod 'FirebaseAuth'
+pod 'FBSDKLoginKit'
+pod 'GoogleSignIn'
+pod 'TwitterKit'
+pod 'Digits'
+
+target 'VMLoginExample' do
+
+end
+
+target 'VMLoginTests' do
+  pod "VMLogin", :path => '../../VMLogin'
+
+end

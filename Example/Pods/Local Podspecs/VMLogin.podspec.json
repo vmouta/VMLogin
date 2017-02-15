@@ -1,0 +1,34 @@
+{
+  "name": "VMLogin",
+  "version": "0.0.1",
+  "summary": "A simple login.",
+  "description": "A OAuth Login",
+  "homepage": "https://github.com/vmouta/VMLogin",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Vasco Mouta": "vasco.mouta@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/vmouta/VMLogin.git",
+    "tag": "0.0.1"
+  },
+  "social_media_url": "https://twitter.com/vmouta",
+  "platforms": {
+    "ios": "10.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*",
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "FirebaseAuth"
+  ],
+  "dependencies": {
+    "FirebaseAuth": [
+
+    ]
+  }
+}
