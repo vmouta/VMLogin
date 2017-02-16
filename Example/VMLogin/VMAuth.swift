@@ -79,6 +79,45 @@ open class VMAuth: NSObject {
 }
 
 
+/// MARK: EmailPassword
+extension VMAuth {
+    
+    func loginEmailPassword(email: String, pass: String) {
+        FIRAuth.auth()?.fetchProviders(forEmail: email) { (providers, error) in
+            guard error == nil else { self.log.error(error); return }
+            if let providers = providers, providers.count > 0 {
+                self.log.debug("Providers for email:\(email) - Providers:\(providers)");
+                if providers.contains(FIREmailPasswordAuthProviderID) {
+                    FIRAuth.auth()?.signIn(withEmail: email, password: pass, completion: { (user, error) in
+                        guard error == nil else { self.log.error(error); return }
+                        guard let _ = user  else { self.log.error("No user"); return}
+                        self.log.debug("Login User:\(email) - Pass:\(pass)");
+                    })
+                } else {
+                    self.log.error("No \(FIREmailPasswordAuthProviderID) provider");
+                }
+            } else {
+                self.log.debug("No providers, Create new User");
+                FIRAuth.auth()?.createUser(withEmail: email, password: pass, completion: { (user, error) in
+                    guard error == nil else { self.log.error(error); return }
+                    guard let _ = user  else { self.log.error("No user"); return}
+                    self.log.debug("Login User:\(email) - Pass:\(pass)");
+                })
+            }
+        }
+    }
+    
+    /** @fn requestPasswordReset
+     @brief Requests a "password reset" email be sent.
+     */
+    func requestPasswordReset(email: String) {
+        FIRAuth.auth()?.sendPasswordReset(withEmail: email) { (error) in
+            guard error == nil else { self.log.error(error); return }
+            self.log.debug("Reset password for email:\(email)");
+        }
+    }
+}
+
 /// MARK: Digits
 extension VMAuth {
     func loginDigits() {
@@ -100,7 +139,7 @@ extension VMAuth {
             self.log.verbose();
             let token = digitsSession.authToken
             let secret = digitsSession.authTokenSecret
-            self.log.debug("Digits Token:\(String(describing: token)) - Secret:\(String(describing: secret))");
+            self.log.debug("Login Digits Token:\(String(describing: token)) - Secret:\(String(describing: secret))");
             
             let digits = Digits.sharedInstance()
             let oauthSigning = DGTOAuthSigning(authConfig:digits.authConfig, authSession: session)
@@ -250,3 +289,28 @@ extension VMAuth {
         return false
     }
 }
+
+
+func showEmailAddress() {
+    
+    let token = FBSDKAccessToken.current();
+    let credentials = FIRFacebookAuthProvider.credential(withAccessToken: (token?.tokenString)!)
+    FIRAuth.auth()?.signIn(with: credentials, completion: {
+        (user, err) in
+        if err != nil {
+            print(err)
+            return
+        }
+        print("Success", user)
+    })
+    
+    FBSDKGraphRequest(graphPath: "/me", parameters:["fields": "id, name, email"]).start{
+        (connection, result, err) in
+        if err != nil {
+            print(err)
+            return
+        }
+        print(result)
+    }
+}
+
