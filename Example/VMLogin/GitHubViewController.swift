@@ -14,7 +14,10 @@ class GitHubViewController: UIViewController {
     let log = Log.getLogger(GitHubViewController.name())  as! Log
     
     @IBAction func logout(_ sender: Any) {
-        // GitHub
+        VMAuth.sharedInstance.logout()
+    }
+    
+    @IBAction func loginGitHub(_ sender: Any) {
         
     }
     
@@ -35,10 +38,6 @@ class GitHubViewController: UIViewController {
 extension GitHubViewController {
     
     fileprivate func setupGitHubButtons() {
-    }
-    
-    @IBAction func loginGitHub(_ sender: Any) {
         
     }
-    
 }

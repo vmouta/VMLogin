@@ -124,6 +124,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BC4564FC1E5505B0009AD6D2 /* Methods */ = {
+			isa = PBXGroup;
+			children = (
+				BC1DDC191E54BB37000BF8D2 /* DigitsViewController.swift */,
+				BC1DDC1F1E54E894000BF8D2 /* EmailPassViewController.swift */,
+				BC1DDC111E54B8E2000BF8D2 /* FacebookViewController.swift */,
+				BC1DDC1B1E54D354000BF8D2 /* GitHubViewController.swift */,
+				BC1DDC121E54B8E2000BF8D2 /* GooleViewController.swift */,
+				BC1DDC141E54B8E2000BF8D2 /* TwitterViewController.swift */,
+			);
+			name = Methods;
+			sourceTree = "<group>";
+		};
 		BC9779951E3E6590003954C3 = {
 			isa = PBXGroup;
 			children = (
@@ -148,15 +161,10 @@
 		BC9779A01E3E6590003954C3 /* VMLogin */ = {
 			isa = PBXGroup;
 			children = (
+				BC4564FC1E5505B0009AD6D2 /* Methods */,
 				BC4564FA1E54FA91009AD6D2 /* VMAuth.swift */,
 				BC9779A11E3E6590003954C3 /* AppDelegate.swift */,
 				BC1DDC131E54B8E2000BF8D2 /* TableViewController.swift */,
-				BC1DDC1F1E54E894000BF8D2 /* EmailPassViewController.swift */,
-				BC1DDC191E54BB37000BF8D2 /* DigitsViewController.swift */,
-				BC1DDC111E54B8E2000BF8D2 /* FacebookViewController.swift */,
-				BC1DDC121E54B8E2000BF8D2 /* GooleViewController.swift */,
-				BC1DDC1B1E54D354000BF8D2 /* GitHubViewController.swift */,
-				BC1DDC141E54B8E2000BF8D2 /* TwitterViewController.swift */,
 				BC81E8991E3E93C600BD1318 /* GoogleService-Info.plist */,
 				BCB5D6C91E3E69C300AC36D4 /* Main.storyboard */,
 				BC9779A81E3E6590003954C3 /* Assets.xcassets */,

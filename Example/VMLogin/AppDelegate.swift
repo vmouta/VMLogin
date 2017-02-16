@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Fabric
 import Firebase
 import FBSDKLoginKit
 import GoogleSignIn
@@ -19,7 +18,7 @@ import VMLogger
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     let log = Log.getLogger(AppDelegate.name())  as! Log
     
     override class func initialize() {
@@ -29,51 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FIRApp.configure()
-        
-        Fabric.with([Twitter.self, Digits.self])
-        
-        //let twitter = Twitter.sharedInstance()
-        //let oauthSigning = TWTROAuthSigning(authConfig:twitter.authConfig, authSession:twitter.session())
-        
-        Twitter.sharedInstance().start(withConsumerKey: "LPXIExIKs4lAg2SXIt3zr3SRA", consumerSecret: "yAW1Tdj1uv6Fy98JeogHDMju2JU9yhkuAj6VGcEud7fqMbRjnk")
-        
-        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
-        
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
-        // Check for an existing Twitter or Digits session before presenting the sign in screen.
-        if Twitter.sharedInstance().sessionStore.session() == nil && Digits.sharedInstance().session() == nil {
-            //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            //let signInViewController: AnyObject! = storyboard.instantiateViewController(withIdentifier: "SignInViewController")
-            //window?.rootViewController = signInViewController as? UIViewController
-        } else {
-            log.info("User Login")
-        }
+        VMAuth.application(application, didFinishLaunchingWithOptions: launchOptions)
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    @available(iOS 9.0, *)
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return self.application(application, open: url, sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: [:])
+    }
+    
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         log.verbose("application.open url")
-        
-        // Comeback from Twitter
-        if Twitter.sharedInstance().application(app, open:url, options:options) {
-            log.verbose("Twitter")
-            return true
-        }
-        
-        // Comeback from Facebook
-        if FBSDKApplicationDelegate.sharedInstance().application(app, open:url, options:options) {
-            log.verbose("Facebook")
-            return true
-        }
-        
-        // Comeback from Google
-        if GIDSignIn.sharedInstance().handle(url, sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: [:]) {
-            log.verbose("Google")
-            return true
-        }
-        return false
+        return VMAuth.application(_:application, open:url, sourceApplication:sourceApplication, annotation:annotation)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -103,28 +69,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug()
     }
 
-}
-
-extension AppDelegate: GIDSignInDelegate {
-    
-    public func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        log.verbose("GIDSignInDelegate.didDisconnectWithUser.didSignInFor")
-        
-        if let error = error { log.error(error); return}
-        
-        guard let authentication = user.authentication else { log.error("user.authentication is nil"); return }
-        let credential = FIRGoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                          accessToken: authentication.accessToken)
-        FIRAuth.auth()?.signIn(with: credential) { (user, error) in
-            if let error = error { self.log.error(error); return }
-        }
-        log.verbose("login successful")
-    }
-    
-    public func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        log.verbose("GIDSignInDelegate.didDisconnectWithUser")
-        
-    }
 }
 
 extension NSObject {

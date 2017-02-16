@@ -7,16 +7,20 @@
 //
 
 import UIKit
-import GoogleSignIn
 import VMLogger
+
+import GoogleSignIn
 
 class GoogleViewController: UIViewController {
 
     let log = Log.getLogger(GoogleViewController.name())  as! Log
     
     @IBAction func logout(_ sender: Any) {
-        // Google
-        GIDSignIn.sharedInstance().signOut()
+        VMAuth.sharedInstance.logout()
+    }
+    
+    @IBAction func loginGoogle(_ sender: Any) {
+        VMAuth.sharedInstance.loginGoogle()
     }
     
     /// MARK: UIViewController
@@ -41,11 +45,7 @@ extension GoogleViewController: GIDSignInUIDelegate {
         googleButton.center = self.view.center;
         view.addSubview(googleButton)
     }
-    
-    @IBAction func loginGoogle(_ sender: Any) {
-        GIDSignIn.sharedInstance().signIn()
-    }
-    
+        
     /// MARK: GIDSignInUIDelegate
     func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
         log.verbose("GIDSignInUIDelegate.present")

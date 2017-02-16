@@ -21,8 +21,7 @@ class EmailPassViewController: UIViewController {
         self.view.endEditing(true)
     }
     @IBAction func logout(_ sender: Any) {
-        // GitHub
-        
+        VMAuth.sharedInstance.logout()
     }
     
     /// MARK: UIViewController

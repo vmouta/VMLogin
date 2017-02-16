@@ -7,19 +7,20 @@
 //
 
 import UIKit
-import TwitterKit
 import VMLogger
+
+import TwitterKit
 
 class TwitterViewController: UIViewController {
 
     let log = Log.getLogger(TwitterViewController.name())  as! Log
 
     @IBAction func logout(_ sender: Any) {
-        //Twitter
-        let sessionStore = Twitter.sharedInstance().sessionStore
-        if let userId = sessionStore.session()?.userID {
-            sessionStore.logOutUserID(userId)
-        }
+        VMAuth.sharedInstance.logout()
+    }
+    
+    @IBAction func loginTwitter(_ sender: Any) {
+        VMAuth.sharedInstance.loginTwitter()
     }
 
     /// MARK: UIViewController
@@ -44,19 +45,10 @@ extension TwitterViewController {
             
             guard let token = session?.authToken else {return}
             guard let secret = session?.authTokenSecret else {return}
+            
         }
         twitterButton.center = self.view.center
         twitterButton.loginMethods = [.systemAccounts, .webBased]
         view.addSubview(twitterButton)
     }
-    
-    @IBAction func loginTwitter(_ sender: Any) {
-        Twitter.sharedInstance().logIn(with: nil) { (session, error) in
-            if let error = error { self.log.error(error); return }
-            guard let token = session?.authToken else {return}
-            guard let secret = session?.authTokenSecret else {return}
-
-        }
-    }
-    
 }

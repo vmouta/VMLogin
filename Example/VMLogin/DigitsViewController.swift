@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import DigitsKit
 import VMLogger
+
+import DigitsKit
 
 class DigitsViewController: UIViewController {
 
@@ -16,11 +17,14 @@ class DigitsViewController: UIViewController {
     var authButton: DGTAuthenticateButton? = nil
     
     @IBAction func logout(_ sender: Any) {
-        //Digits
-        Digits.sharedInstance().logOut()
+        VMAuth.sharedInstance.logout()
         authButton?.isEnabled = true
     }
-
+    
+    @IBAction func loginDigits(_ sender: Any) {
+        VMAuth.sharedInstance.loginDigits()
+    }
+    
     /// MARK: UIViewController
     
     override func viewDidLoad() {
@@ -60,31 +64,6 @@ extension DigitsViewController {
             if (digits.session()?.emailAddressIsVerified == false) {
                 print("Email not verified!")
             }
-        }
-    }
-    
-    @IBAction func loginDigits(_ sender: Any) {
-        let digits = Digits.sharedInstance()
-        let configuration = DGTAuthenticationConfiguration(accountFields: .email)
-        //let configuration = DGTAuthenticationConfiguration(accountFields: .defaultOptionMask)
-        configuration?.phoneNumber = "+41"
-        
-        configuration?.appearance = DGTAppearance()
-        //configuration?.appearance.logoImage = UIImage(named: "logo")
-        configuration?.appearance.labelFont = UIFont(name: "HelveticaNeue-Bold", size: 16)
-        configuration?.appearance.bodyFont = UIFont(name: "HelveticaNeue-Italic", size: 16)
-        configuration?.appearance.accentColor = UIColor(red:0.33, green:0.67, blue:0.93, alpha:1.0)
-        //configuration?.appearance.backgroundColor = UIColor(patternImage: UIImage(named: "bg-pattern")!)
-        
-        digits.authenticate(with: nil, configuration: configuration!) { session, error in
-            // Country selector will be set to Spain and phone number field will be set to 5555555555
-           
-            
-            let digits = Digits.sharedInstance()
-            let oauthSigning = DGTOAuthSigning(authConfig:digits.authConfig, authSession: session)
-            let authHeaders = oauthSigning?.oAuthEchoHeadersToVerifyCredentials()
-            let url = authHeaders?[ TWTROAuthEchoRequestURLStringKey ] as! String
-            let authorization = authHeaders?[ TWTROAuthEchoAuthorizationHeaderKey ] as! String
         }
     }
 }

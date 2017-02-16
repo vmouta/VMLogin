@@ -7,16 +7,20 @@
 //
 
 import UIKit
-import FBSDKLoginKit
 import VMLogger
+
+import FBSDKLoginKit
 
 class FacebookViewController: UIViewController {
 
     let log = Log.getLogger(FacebookViewController.name())  as! Log
 
     @IBAction func logout(_ sender: Any) {
-        // Facebook
-        FBSDKLoginManager().logOut()
+        VMAuth.sharedInstance.logout()
+    }
+    
+    @IBAction func loginFacebook(_ sender: Any) {
+        VMAuth.sharedInstance.loginFacebook(from: self)
     }
     
     /// MARK: UIViewController
@@ -41,14 +45,6 @@ extension FacebookViewController: FBSDKLoginButtonDelegate {
         loginFBButton.readPermissions = ["email", "public_profile", "user_friends"]
         loginFBButton.center = self.view.center;
         view.addSubview(loginFBButton)
-    }
-    
-    @IBAction func loginFacebook(_ sender: Any) {
-        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile", "user_friends"], from: self) { (result, error) in
-            if let error = error { self.log.error(error); return }
-            self.log.verbose(result?.token.tokenString)
-            self.showEmailAddress()
-        }
     }
     
     func showEmailAddress() {
